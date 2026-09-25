@@ -35,6 +35,7 @@ type UniversityRow = {
   domain: string | null
   logo_url: string | null
   is_active: boolean
+  settings: Record<string, unknown>
 }
 
 type ProfileRow = {
