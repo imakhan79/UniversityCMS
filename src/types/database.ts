@@ -44,6 +44,11 @@ type ProfileRow = {
   full_name: string
   avatar_url: string | null
   phone: string | null
+  address: string | null
+  city: string | null
+  country: string | null
+  date_of_birth: string | null
+  gender: string | null
   is_active: boolean
   created_at: string
   updated_at: string
@@ -179,12 +184,88 @@ type EmployeeRow = { id: string; university_id: string; employment_status: strin
 type FeeInvoiceRow = {
   id: string
   university_id: string
+  student_id: string
+  semester_id: string | null
+  invoice_number: string
   amount_due: number
   amount_paid: number
+  due_date: string | null
   status: string
 }
-type AttendanceRow = { id: string; university_id: string; status: string }
+type AttendanceRow = {
+  id: string
+  university_id: string
+  student_id: string
+  course_offering_id: string
+  session_date: string
+  status: string
+}
 type ResultRow = { id: string; university_id: string; status: string; published: boolean }
+
+type CoursePrerequisiteRow = {
+  id: string
+  university_id: string
+  course_id: string
+  prerequisite_course_id: string
+}
+
+type CourseOfferingRow = {
+  id: string
+  university_id: string
+  course_id: string
+  semester_id: string
+  campus_id: string | null
+  section_code: string
+  instructor_id: string | null
+  max_seats: number
+  enrolled_count: number
+  schedule: { day: string; start: string; end: string }[]
+  room: string | null
+  mode: string
+  status: string
+}
+
+type RegistrationRow = {
+  id: string
+  university_id: string
+  student_id: string
+  course_offering_id: string
+  semester_id: string
+  status: string
+}
+
+type GradeRow = {
+  id: string
+  university_id: string
+  registration_id: string
+  student_id: string
+  course_offering_id: string
+  marks_obtained: number | null
+  letter_grade: string | null
+  grade_points: number | null
+  is_final: boolean
+}
+
+type StudentDocumentRow = {
+  id: string
+  university_id: string
+  student_id: string
+  document_type: string
+  file_path: string
+  file_name: string
+  verified: boolean
+} & Audited
+
+type PaymentRow = {
+  id: string
+  university_id: string
+  fee_invoice_id: string
+  student_id: string
+  amount: number
+  payment_method: string
+  status: string
+  paid_at: string
+}
 
 export interface Database {
   public: {
@@ -240,9 +321,71 @@ export interface Database {
         Partial<StudentRow> & { id: string; university_id: string; student_number: string; program_id: string }
       >
       employees: Table<EmployeeRow, Partial<EmployeeRow> & { id: string; university_id: string }>
-      fee_invoices: Table<FeeInvoiceRow, Partial<FeeInvoiceRow> & { university_id: string }>
-      attendance: Table<AttendanceRow, Partial<AttendanceRow> & { university_id: string }>
+      fee_invoices: Table<
+        FeeInvoiceRow,
+        Partial<FeeInvoiceRow> & {
+          university_id: string
+          student_id: string
+          invoice_number: string
+          amount_due: number
+        }
+      >
+      attendance: Table<
+        AttendanceRow,
+        Partial<AttendanceRow> & {
+          university_id: string
+          student_id: string
+          course_offering_id: string
+          session_date: string
+        }
+      >
       results: Table<ResultRow, Partial<ResultRow> & { university_id: string }>
+      course_offerings: Table<
+        CourseOfferingRow,
+        Partial<CourseOfferingRow> & { university_id: string; course_id: string; semester_id: string }
+      >
+      registrations: Table<
+        RegistrationRow,
+        Partial<RegistrationRow> & {
+          university_id: string
+          student_id: string
+          course_offering_id: string
+          semester_id: string
+        }
+      >
+      grades: Table<
+        GradeRow,
+        Partial<GradeRow> & {
+          university_id: string
+          registration_id: string
+          student_id: string
+          course_offering_id: string
+        }
+      >
+      student_documents: Table<
+        StudentDocumentRow,
+        Partial<StudentDocumentRow> & {
+          university_id: string
+          student_id: string
+          document_type: string
+          file_path: string
+          file_name: string
+        }
+      >
+      course_prerequisites: Table<
+        CoursePrerequisiteRow,
+        Partial<CoursePrerequisiteRow> & { university_id: string; course_id: string; prerequisite_course_id: string }
+      >
+      payments: Table<
+        PaymentRow,
+        Partial<PaymentRow> & {
+          university_id: string
+          fee_invoice_id: string
+          student_id: string
+          amount: number
+          payment_method: string
+        }
+      >
     }
     Views: Record<string, never>
     Functions: Record<string, never>

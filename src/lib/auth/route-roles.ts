@@ -6,7 +6,7 @@ import type { AppRole } from "@/types/database"
 export const ROUTE_ROLE_MAP: Record<string, AppRole[]> = {
   admin: ["super_admin", "admin", "registrar"],
   student: ["student"],
-  faculty: ["faculty"],
+  faculty: ["faculty", "hod", "dean"],
   dean: ["dean"],
   hod: ["hod"],
   finance: ["finance", "admin", "super_admin"],
