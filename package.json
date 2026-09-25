@@ -30,6 +30,7 @@
     "react-dom": "^18",
     "react-hook-form": "^7.88.0",
     "recharts": "^3.10.1",
+    "resend": "^6.29.0",
     "server-only": "^0.0.1",
     "shadcn": "^4.21.0",
     "sonner": "^2.0.8",

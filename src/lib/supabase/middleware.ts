@@ -18,6 +18,10 @@ const PUBLIC_PATHS = [
 function isPublicPath(pathname: string) {
   if (PUBLIC_PATHS.includes(pathname)) return true
   if (pathname.startsWith("/_next") || pathname.startsWith("/favicon")) return true
+  // Public admissions portal: browsable by anyone; submitting an
+  // application still requires auth, enforced by RLS on `applications`
+  // (applicant_id = auth.uid()) and by the form itself prompting sign-in.
+  if (pathname.startsWith("/admissions")) return true
   return false
 }
 

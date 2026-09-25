@@ -202,6 +202,95 @@ type AttendanceRow = {
 }
 type ResultRow = { id: string; university_id: string; status: string; published: boolean }
 
+export type ApplicationStatus =
+  | "draft"
+  | "submitted"
+  | "under_review"
+  | "shortlisted"
+  | "accepted"
+  | "rejected"
+  | "waitlisted"
+  | "withdrawn"
+  | "enrolled"
+
+type ApplicationRow = {
+  id: string
+  university_id: string
+  applicant_id: string
+  program_id: string
+  application_number: string
+  intake_semester_id: string | null
+  status: ApplicationStatus
+  previous_education: unknown[]
+  personal_details: Record<string, unknown>
+  submitted_at: string | null
+  reviewed_by: string | null
+  reviewed_at: string | null
+  decision_notes: string | null
+} & Audited
+
+type ApplicationDocumentRow = {
+  id: string
+  university_id: string
+  application_id: string
+  document_type: string
+  file_path: string
+  file_name: string
+  verified: boolean
+} & Audited
+
+type EntryTestRow = {
+  id: string
+  university_id: string
+  program_id: string | null
+  name: string
+  test_date: string | null
+  total_marks: number
+  passing_marks: number | null
+  is_active: boolean
+} & Audited
+
+type EntryTestResultRow = {
+  id: string
+  university_id: string
+  entry_test_id: string
+  application_id: string
+  marks_obtained: number | null
+  percentile: number | null
+  passed: boolean | null
+} & Audited
+
+type MeritListRow = {
+  id: string
+  university_id: string
+  program_id: string
+  intake_semester_id: string | null
+  name: string
+  is_final: boolean
+  published_at: string | null
+  published_by: string | null
+} & Audited
+
+type MeritListEntryRow = {
+  id: string
+  university_id: string
+  merit_list_id: string
+  application_id: string
+  rank: number
+  score: number | null
+}
+
+type SeatAllocationRow = {
+  id: string
+  university_id: string
+  application_id: string
+  program_id: string
+  intake_semester_id: string | null
+  seat_category: string
+  status: string
+  allocated_at: string
+} & Audited
+
 type CoursePrerequisiteRow = {
   id: string
   university_id: string
@@ -371,6 +460,37 @@ export interface Database {
           file_path: string
           file_name: string
         }
+      >
+      applications: Table<
+        ApplicationRow,
+        Partial<ApplicationRow> & { university_id: string; applicant_id: string; program_id: string; application_number: string }
+      >
+      application_documents: Table<
+        ApplicationDocumentRow,
+        Partial<ApplicationDocumentRow> & {
+          university_id: string
+          application_id: string
+          document_type: string
+          file_path: string
+          file_name: string
+        }
+      >
+      entry_tests: Table<EntryTestRow, Partial<EntryTestRow> & { university_id: string; name: string }>
+      entry_test_results: Table<
+        EntryTestResultRow,
+        Partial<EntryTestResultRow> & { university_id: string; entry_test_id: string; application_id: string }
+      >
+      merit_lists: Table<
+        MeritListRow,
+        Partial<MeritListRow> & { university_id: string; program_id: string; name: string }
+      >
+      merit_list_entries: Table<
+        MeritListEntryRow,
+        Partial<MeritListEntryRow> & { university_id: string; merit_list_id: string; application_id: string; rank: number }
+      >
+      seat_allocations: Table<
+        SeatAllocationRow,
+        Partial<SeatAllocationRow> & { university_id: string; application_id: string; program_id: string }
       >
       course_prerequisites: Table<
         CoursePrerequisiteRow,

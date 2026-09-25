@@ -189,6 +189,18 @@ export const NAV_SECTIONS: NavSection[] = [
         roles: ["super_admin", "admin", "registrar"],
       },
       {
+        label: "Entry Tests",
+        href: "/admin/admissions/entry-tests",
+        icon: ClipboardList,
+        roles: ["super_admin", "admin", "registrar"],
+      },
+      {
+        label: "Merit Lists",
+        href: "/admin/admissions/merit-lists",
+        icon: ClipboardList,
+        roles: ["super_admin", "admin", "registrar"],
+      },
+      {
         label: "Employees",
         href: "/hr",
         icon: UserCog,
